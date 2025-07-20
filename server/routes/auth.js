@@ -1,35 +1,41 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const admin = require('../firebaseAdmin'); // Our new Firebase Admin config
-const User = require('../models/User');    // Our existing User model
+const admin = require('../firebaseAdmin');
+const User = require('../models/User');
 const router = express.Router();
 
-// This new route handles Google Sign-In
 router.post('/google', async (req, res) => {
   const { idToken } = req.body;
-
   try {
-    // 1. Verify the token from the client with Google's services
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     const { email } = decodedToken;
 
-    // 2. Find or create a user in OUR MongoDB database
     let user = await User.findOne({ email: email });
     if (!user) {
       user = new User({ email: email });
-      // Since Google handles the password, we can save without one
       await user.save({ validateBeforeSave: false });
     }
 
-    // 3. Create OUR OWN JWT token to send back to the client
     const payload = { userId: user._id };
     const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.json({ token: jwtToken });
 
   } catch (error) {
-    console.error("Authentication error:", error);
-    res.status(401).send('Authentication failed.');
+    // --- THIS IS THE UPDATED PART ---
+    console.error("--- Full Firebase Authentication Error ---");
+    console.error("Error Code:", error.code);
+    console.error("Error Message:", error.message);
+    console.error("--- End of Error ---");
+
+    // Specifically check for clock skew issues
+    if (error.code === 'auth/id-token-expired') {
+      return res.status(401).json({ 
+        msg: 'Token expired. This is often caused by your computer clock being out of sync.' 
+      });
+    }
+
+    return res.status(401).send('Authentication failed.');
   }
 });
 

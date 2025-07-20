@@ -5,7 +5,7 @@ import SearchResultCard from '../components/SearchResultCard';
 import BookCard from '../components/BookCard';
 import FilterTabs from '../components/FilterTabs';
 
-const API_KEY = 'YOUR_GOOGLE_BOOKS_API_KEY_HERE';
+const API_KEY = 'AIzaSyCAGoDo4tbzrib8IlCUA57JGmVKsY6086o';
 
 const DashboardPage = ({ user, onLogout }) => {
   const [books, setBooks] = useState([]);
