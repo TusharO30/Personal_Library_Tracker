@@ -1,0 +1,4 @@
+# Server secrets and dependencies
+node_modules
+.env
+serviceAccountKey.json
