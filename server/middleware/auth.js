@@ -1,20 +1,30 @@
+const express = require('express');
 const jwt = require('jsonwebtoken');
+const admin = require('../firebaseAdmin');
+const User = require('../models/User');
+const router = express.Router();
 
-module.exports = (req, res, next) => {
-  // Get token from the header
-  const token = req.header('x-auth-token');
-
-  // Check if not token
-  if (!token) {
-    return res.status(401).send('Access denied. No token provided.');
-  }
-
-  // Verify token
+router.post('/google', async (req, res) => {
+  const { idToken } = req.body;
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (ex) {
-    res.status(400).send('Invalid token.');
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { email } = decodedToken;
+
+    let user = await User.findOne({ email: email });
+    if (!user) {
+      user = new User({ email: email });
+      await user.save({ validateBeforeSave: false });
+    }
+
+    const payload = { userId: user._id };
+    const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.json({ token: jwtToken });
+
+  } catch (error) {
+    console.error("Authentication error:", error);
+    res.status(401).send('Authentication failed.');
   }
-};
+});
+
+module.exports = router;

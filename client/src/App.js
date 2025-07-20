@@ -51,12 +51,10 @@ function App() {
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken && user) {
-      setToken(storedToken);
-      fetchBooks(storedToken);
+    if (token && user) {
+      fetchBooks(token);
     }
-  }, [user]);
+  }, [token, user]); // <-- Change this line
 
   const handleLogout = () => {
     auth.signOut(); // This will trigger onAuthStateChanged to clear user and token
