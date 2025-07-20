@@ -8,6 +8,7 @@ import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
 
 const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+console.log("Connecting to API at:", API_BASE_URL); // <-- ADD THIS LINE
 
 function App() {
   const [user, setUser] = useState(null);
