@@ -5,19 +5,36 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import ProfilePage from './pages/ProfilePage'; // <-- Import new page
+import ProfilePage from './pages/ProfilePage';
+
+// This line makes your app use the live backend URL when deployed
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] =useState(localStorage.getItem('token'));
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (!currentUser) {
-        // If firebase auth state is lost, clear our token too
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        // If there's a Firebase user but we don't have our backend token yet, get one.
+        if (!localStorage.getItem('token')) {
+          const idToken = await currentUser.getIdToken();
+          try {
+            const res = await axios.post(`${API_BASE_URL}/api/auth/google`, { idToken });
+            const newToken = res.data.token;
+            localStorage.setItem('token', newToken);
+            setToken(newToken);
+          } catch (error) {
+            console.error("Failed to exchange token with backend", error);
+          }
+        }
+      } else {
+        // User logged out
+        setUser(null);
         localStorage.removeItem('token');
         setToken(null);
       }
@@ -25,10 +42,10 @@ function App() {
     });
     return () => unsubscribe();
   }, []);
-
+  
   const fetchBooks = async (jwtToken) => {
     try {
-      const res = await axios.get('http://localhost:5000/api/books', { headers: { 'x-auth-token': jwtToken } });
+      const res = await axios.get(`${API_BASE_URL}/api/books`, { headers: { 'x-auth-token': jwtToken } });
       setBooks(res.data);
     } catch (err) { console.error("Failed to fetch books:", err); }
   };
@@ -39,32 +56,25 @@ function App() {
       setToken(storedToken);
       fetchBooks(storedToken);
     }
-  }, [user]); // Fetch books when user logs in
-
-  const handleLogin = (newToken) => {
-    localStorage.setItem('token', newToken);
-    setToken(newToken);
-  };
+  }, [user]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
-    auth.signOut(); // Also sign out from Firebase
+    auth.signOut(); // This will trigger onAuthStateChanged to clear user and token
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen bg-slate-800 text-white">Loading...</div>;
   }
 
   return (
     <Router>
       {token && user ? (
         <Routes>
-          <Route path="/" element={<DashboardPage user={user} books={books} onLogout={handleLogout} fetchBooks={fetchBooks} />} />
+          <Route path="/" element={<DashboardPage user={user} books={books} onLogout={handleLogout} fetchBooks={() => fetchBooks(token)} />} />
           <Route path="/profile" element={<ProfilePage user={user} books={books} />} />
         </Routes>
       ) : (
-        <LoginPage onLogin={handleLogin} />
+        <LoginPage />
       )}
     </Router>
   );
