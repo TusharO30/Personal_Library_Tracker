@@ -18,14 +18,7 @@ const DashboardPage = ({ user, books, onLogout, fetchBooks }) => {
 
   const getToken = () => localStorage.getItem('token');
 
-  const fetchBooks = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get('http://localhost:5000/api/books', { headers: { 'x-auth-token': getToken() } });
-      setBooks(res.data);
-    } catch (err) { console.error("Failed to fetch books:", err); }
-    setLoading(false);
-  };
+  
 
   const addBookToLibrary = async (book) => {
     const newBook = {
