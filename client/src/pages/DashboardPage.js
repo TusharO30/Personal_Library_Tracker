@@ -6,10 +6,10 @@ import BookCard from '../components/BookCard';
 import FilterTabs from '../components/FilterTabs';
 
 // IMPORTANT: Add your Google Books API key here
-const API_KEY = 'AIzaSyCAGoDo4tbzrib8IlCUA57JGmVKsY6086o';
+const API_KEY = 'YOUR_GOOGLE_BOOKS_API_KEY_HERE';
 
 const DashboardPage = ({ user, books, onLogout, fetchBooks }) => {
-  const [loading, setLoading] = useState(false); // Used for search loading, main loading is handled in App.js
+  const [loading, setLoading] = useState(false); // This was the line with the warning
   const [librarySearchTerm, setLibrarySearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [filteredBooks, setFilteredBooks] = useState([]);
@@ -17,6 +17,15 @@ const DashboardPage = ({ user, books, onLogout, fetchBooks }) => {
   const [searchResults, setSearchResults] = useState([]);
 
   const getToken = () => localStorage.getItem('token');
+
+  const fetchBooks = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get('http://localhost:5000/api/books', { headers: { 'x-auth-token': getToken() } });
+      setBooks(res.data);
+    } catch (err) { console.error("Failed to fetch books:", err); }
+    setLoading(false);
+  };
 
   const addBookToLibrary = async (book) => {
     const newBook = {
@@ -43,7 +52,7 @@ const DashboardPage = ({ user, books, onLogout, fetchBooks }) => {
   };
 
   const deleteBook = async (bookId) => {
-    if (window.confirm("Are you sure you want to delete this book?")) {
+    if (window.confirm("Are you sure?")) {
       try {
         await axios.delete(`http://localhost:5000/api/books/${bookId}`, { headers: { 'x-auth-token': getToken() } });
         fetchBooks(getToken()); // Refresh the book list
