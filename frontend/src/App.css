@@ -1,0 +1,375 @@
+:root {
+  --primary-color: #c26e6e; 
+  --secondary-color: #5e893a; 
+  --accent-color: #2979ff; 
+  
+  --bg-color-dark: #1e2a38;
+  --card-bg: #2c3e50; 
+  --input-bg: #34495e; 
+  
+  --text-color-light: #f0f4f8; 
+  --text-color-faded: #b0c2d3; 
+  --shadow-light: rgba(255, 255, 255, 0.05);
+  --shadow-dark: rgba(0, 0, 0, 0.4);
+  --border-color: #44586d;
+  
+  --font-family: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-light);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  background-color: #1a202c;
+  color: var(--text-color-light);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px -1px var(--shadow-dark);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+header a {
+  color: var(--text-color-light);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+header a:hover {
+  color: var(--primary-color);
+}
+
+header button {
+  background-color: var(--primary-color);
+  color: var(--text-color-light);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+header button:hover {
+  background-color: #ad3e54; 
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow-dark);
+}
+/* Container for main content */
+.container {
+  flex-grow: 1;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+/* Form Styles (Login & Register) */
+form {
+  background: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px var(--shadow-dark);
+  max-width: 450px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+form h2 {
+  text-align: center;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+form input {
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-bg);
+  color: var(--text-color-light);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+}
+
+form button {
+  background-color: var(--accent-color);
+  color: var(--text-color-light);
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+form button:hover {
+  background-color: #2962ff; 
+  transform: translateY(-2px);
+  box-shadow: 4px 8px var(--shadow-dark);
+}
+
+/* Home Page Styles */
+.search-form {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.search-form input {
+  flex-grow: 1;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-bg);
+  color: var(--text-color-light);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.search-form button {
+  background-color: var(--secondary-color);
+  color: var(--text-color-light);
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.search-form button:hover {
+  background-color: #36750f; 
+  transform: translateY(-2px);
+  box-shadow: 4px 8px var(--shadow-dark);
+}
+
+.search-results,
+.my-library {
+  margin-top: 2rem;
+}
+
+.search-results ul,
+.my-library ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.search-results li,
+.my-library li {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-results li:hover,
+.my-library li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px var(--shadow-dark);
+}
+
+.search-results li img,
+.my-library li img {
+  max-width: 120px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow-dark);
+}
+
+.search-results li h4,
+.my-library li h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+  color: var(--text-color-light);
+  font-weight: 700;
+}
+
+.search-results li p,
+.my-library li p {
+  margin: 0;
+  color: var(--text-color-faded);
+  font-size: 0.9rem;
+}
+
+/* Filter and Search Controls */
+.filter-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.status-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.status-buttons button,
+.filter-controls .filter-input {
+    padding: 0.75rem 1.25rem;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-color-faded);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.status-buttons button.active,
+.status-buttons button:hover {
+    background-color: #2962ff; 
+    color: var(--text-color-light);
+    transform: translateY(-2px);
+    border-color: #2962ff;
+}
+
+.filter-controls .filter-input {
+    flex-grow: 1;
+    max-width: 300px;
+}
+
+/* Buttons within the book list items - UPDATED */
+.my-library li .book-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.my-library li .book-actions button {
+    background-color: transparent;
+    color: var(--text-color-light);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.my-library li .book-actions .edit-button {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.my-library li .book-actions .edit-button:hover {
+    background-color: var(--accent-color);
+    color: var(--text-color-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-dark);
+}
+
+.my-library li .book-actions .delete-button {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.my-library li .book-actions .delete-button:hover {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-dark);
+}
+
+/* Style for the buttons inside the edit form */
+.my-library li form button {
+    background-color: var(--secondary-color);
+    color: var(--text-color-light);
+    margin: 0 0.25rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.my-library li form button:hover {
+    background-color: #3b9161;
+}
+
+/* Dropdown list in the Edit Form */
+.my-library li form select {
+ padding: 0.75rem;
+ border: 2px solid var(--border-color);
+ border-radius: 8px;
+ background-color: var(--input-bg);
+ font-size: 1rem;
+ color: var(--text-color-faded);
+ transition: border-color 0.3s ease;
+ -webkit-appearance: none;
+ -moz-appearance: none;
+ appearance: none;
+ background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23b0c2d3"><path d="M7 10l5 5 5-5z"/></svg>');
+ background-repeat: no-repeat;
+ background-position: right 0.75rem center;
+ background-size: 16px 16px;
+ margin-bottom: 0.5rem;
+}
+
+.my-library li form select:focus {
+ outline: none;
+ border-color: var(--primary-color);
+ box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+}
+/* Add to Library button in search results */
+.search-results li button {
+  background-color: transparent; 
+  color: var(--secondary-color); 
+  border: 1px solid var(--secondary-color); 
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-results li button:hover {
+  background-color: var(--secondary-color); 
+  color: var(--text-color-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow-dark);
+}
