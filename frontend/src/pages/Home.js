@@ -29,7 +29,7 @@ const Home = () => {
     const fetchBooks = async () => {
         const token = localStorage.getItem('token');
         try {
-            const res = await axios.get('http://localhost:5000/api/books', {
+            const res = await axios.get('https://personal-library-tracker-tupi.onrender.com/api/books', {
                 headers: { 'x-auth-token': token }
             });
             setBooks(res.data);
@@ -43,7 +43,7 @@ const Home = () => {
         if (!searchTerm) return;
     
         try {
-            const res = await axios.get(`http://localhost:5000/api/books/search?q=${searchTerm}`);
+            const res = await axios.get(`https://personal-library-tracker-tupi.onrender.com/api/books/search?q=${searchTerm}`);
             setSearchResults(res.data.items);
         } catch (err) {
             console.error('Error searching for books:', err);
@@ -62,7 +62,7 @@ const Home = () => {
         };
     
         try {
-            await axios.post('http://localhost:5000/api/books', newBook, {
+            await axios.post('https://personal-library-tracker-tupi.onrender.com/api/books', newBook, {
                 headers: { 'x-auth-token': token }
             });
             setSearchTerm('');
@@ -76,7 +76,7 @@ const Home = () => {
     const handleDeleteBook = async (id) => {
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:5000/api/books/${id}`, {
+            await axios.delete(`https://personal-library-tracker-tupi.onrender.com/api/books/${id}`, {
                 headers: { 'x-auth-token': token }
             });
             fetchBooks();
@@ -103,7 +103,7 @@ const Home = () => {
         e.preventDefault();
         const token = localStorage.getItem('token');
         try {
-            await axios.put(`http://localhost:5000/api/books/${editBookId}`, editFormData, {
+            await axios.put(`https://personal-library-tracker-tupi.onrender.com/api/books/${editBookId}`, editFormData, {
                 headers: { 'x-auth-token': token }
             });
             setEditBookId(null);

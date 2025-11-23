@@ -10,7 +10,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/auth/register', { email, password });
+            await axios.post('https://personal-library-tracker-tupi.onrender.com/api/auth/register', { email, password });
             alert('Registration successful! Please log in.');
             navigate('/login');
         } catch (err) {
